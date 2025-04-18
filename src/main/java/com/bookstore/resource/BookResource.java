@@ -29,4 +29,35 @@ public class BookResource {
 
     @GET
     @Path("/{id}")
+    public Response getBookById(@PathParam("id") int id) {
+        Book book = books.get(id);
+        if (book == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Book not found").build();
+        }
+        return Response.ok(book).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response updateBook(@PathParam("id") int id, Book updatedBook) {
+        if (!books.containsKey(id)) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Book not found").build();
+        }
+        updatedBook.setId(id);
+        books.put(id, updatedBook);
+        return Response.ok(updatedBook).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteBook(@PathParam("id") int id) {
+        if (!books.containsKey(id)) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Book not found").build();
+        }
+        books.remove(id);
+        return Response.noContent().build();
+    }
 }
